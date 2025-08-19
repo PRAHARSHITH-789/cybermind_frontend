@@ -1,0 +1,19 @@
+.nav-hover {
+  color: #000; /* default text color */
+  transition: color 0.3s ease; /* smooth transition */
+}
+
+.nav-hover:hover {
+  color: blue; /* color on hover */
+}
+/* Default for small screens */
+.navbar-custom {
+  border-radius: 0.25rem; /* same as rounded */
+}
+
+/* Large screens and above */
+@media (min-width: 992px) { /* lg breakpoint */
+  .navbar-custom {
+    border-radius: 50rem; /* same as rounded-pill */
+  }
+}
