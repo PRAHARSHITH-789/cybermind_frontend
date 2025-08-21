@@ -154,7 +154,7 @@ function JobCards() {
     {/* Salary Slider */}
     <Col xs={12} md={3} className="d-flex flex-column">
       <div className="mb-1 text-dark d-flex justify-content-between small">
-        <span className="fw-bold">Salary per month</span>
+        <span className="fw-bold">Salary Per Month</span>
         <span className="fw-bold">
           ₹ {(range[0] / 1000).toLocaleString("en-IN")}K - ₹ {(range[1] / 1000).toLocaleString("en-IN")}K
         </span>
