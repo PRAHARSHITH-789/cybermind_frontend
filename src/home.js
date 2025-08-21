@@ -61,8 +61,8 @@ function JobCards() {
  <Navbar
   bg="white"
   expand="lg"
-  className="shadow-sm py-3 mx-auto navbar-custom mt-2 h-25 overflow-hidden "
-  style={{ maxWidth: "800px", borderRadius: "50px" }}
+  className="shadow-sm  mx-auto navbar-custom  overflow-hidden "
+  style={{ maxWidth: "800px", borderRadius: "50px",maxHeight:"10%" }}
 >
   <Container>
     <Navbar.Brand href="#">
