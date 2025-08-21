@@ -6,6 +6,13 @@
    
   }
 }
+.shadow-sm {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  border-left: none;
+  border-right:none;
+  border-right: none;/* only bottom shadow */
+}
+
 
 /* Large screens (≥992px): pill shape, fixed 800px */
 @media (min-width: 992px) {

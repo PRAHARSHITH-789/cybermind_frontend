@@ -97,7 +97,7 @@ function JobCards() {
       <CreateJob show={showModal} onHide={() => setShowModal(false)} />
 
       {/* Filters */}
-     <Container className="my-4 container-fluid container-xl">
+     <Container className="my-4 container-fluid container-xl  pb-2 bg-white">
   <Row className="g-3 align-items-center">
     
     {/* Title Filter */}
@@ -196,7 +196,7 @@ function JobCards() {
         if (diffHrs < 1) {
           timeAgo = "Just now";
         } else{
-          timeAgo = `${diffHrs}h ago`;
+          timeAgo = `${diffHrs}h Ago`;
         } 
       }
 

@@ -70,9 +70,9 @@ function CreateJob({ show, onHide }) {
 
   return (
     <Modal show={show} onHide={onHide} size="lg" centered>
-      <Modal.Header closeButton>
+      <div closeButton>
         <Modal.Title className="w-100 text-center">Create Job Openings</Modal.Title>
-      </Modal.Header>
+      </div>
       <Modal.Body>
         <Form>
           {/* Role & Company */}
@@ -153,7 +153,7 @@ function CreateJob({ show, onHide }) {
                       </InputGroup.Text>
                       <FormControl
                         type="number"
-                        placeholder="Start"
+                        placeholder=" ₹ 0"
                         name="salaryStart"
                         value={jobData.salaryStart}
                         onChange={handleChange}
@@ -167,7 +167,7 @@ function CreateJob({ show, onHide }) {
                       </InputGroup.Text>
                       <FormControl
                         type="number"
-                        placeholder="End"
+                        placeholder=" ₹ 12,000,000"
                         name="salaryEnd"
                         value={jobData.salaryEnd}
                         onChange={handleChange}
@@ -198,6 +198,7 @@ function CreateJob({ show, onHide }) {
               as="textarea"
               rows={4}
               name="description"
+              placeholder="Please provide share a description to let a  candidate know about the job role"
               value={jobData.description}
               onChange={handleChange}
               required
@@ -208,16 +209,17 @@ function CreateJob({ show, onHide }) {
           </Form.Group>
 
           {/* Buttons */}
-          <div className="d-flex flex-column flex-md-row justify-content-between">
+          <div className="d-flex flex-column flex-md-row  bg-white justify-content-between">
             <Button
-              variant="secondary"
-              className="mb-2 mb-md-0"
+          
+              className="mb-2 mb-md-0 bg-light text-dark m-2 px-5"
               onClick={handleSaveDraft}
             >
-              Save as Draft
+              Save Draft
+              <i className="bi bi-chevron-double-down mx-2"></i>
             </Button>
-            <Button variant="success" onClick={handleSubmit}>
-              Publish <i className="bi bi-arrow-right"></i>
+            <Button className=" btn-info text-light px-4 " onClick={handleSubmit}>
+              Publish <i className="bi bi-chevron-double-right"></i>
             </Button>
           </div>
         </Form>
