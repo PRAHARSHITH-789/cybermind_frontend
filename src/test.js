@@ -35,12 +35,13 @@ function CreateJob({ show, onHide }) {
   };
 
   const handleSubmit = async (e) => {
+  
     e.preventDefault();
     try {
       const response = await axios.post("https://myjob-9vq3.onrender.com/api/jobs", jobData);
 
       if (response.status === 201) {
-        alert(response.data.message);
+        alert("Job created successfully!");
         onHide();
         setJobData({
           role: "",
@@ -131,10 +132,9 @@ function CreateJob({ show, onHide }) {
                   required
                 >
                   <option value="">Select Type</option>
-                  <option value="Full-Time">Full-Time</option>
-                  <option value="Part-Time">Part-Time</option>
-                  <option value="Internship">Internship</option>
-                  <option value="Contract">Contract</option>
+                  <option value="OnSite">Onsite</option>
+                  <option value="Remote">Remote</option>
+                  <option value="Hybrid">Hybrid</option>
                 </Form.Select>
               </Form.Group>
             </Col>

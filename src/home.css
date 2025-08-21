@@ -1,19 +1,18 @@
-.nav-hover {
-  color: #000; /* default text color */
-  transition: color 0.3s ease; /* smooth transition */
-}
-
-.nav-hover:hover {
-  color: blue; /* color on hover */
-}
-/* Default for small screens */
-.navbar-custom {
-  border-radius: 0.25rem; /* same as rounded */
-}
-
-/* Large screens and above */
-@media (min-width: 992px) { /* lg breakpoint */
+/* Small screens (≤ 991px): rectangle, 95% width */
+@media (max-width: 991px) {
   .navbar-custom {
-    border-radius: 50rem; /* same as rounded-pill */
+    width: 95% !important;        /* responsive, almost full width */
+    max-width: 95%;
+   
+  }
+}
+
+/* Large screens (≥992px): pill shape, fixed 800px */
+@media (min-width: 992px) {
+  .navbar-custom {
+    width: 800px !important;       /* fixed width */
+    max-width: 800px;
+    border-radius: 50px !important; /* pill */
+    margin: 0 auto;                /* keep centered */
   }
 }

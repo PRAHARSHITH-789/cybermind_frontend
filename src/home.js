@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import './home.css';
+
 import CreateJob from "./test"; // Your modal component
 import axios from "axios";
 import {
@@ -19,9 +19,9 @@ import {
 } from "react-bootstrap";
 
 function JobCards() {
-  const [range, setRange] = useState([0, 100000]);
+  const [range, setRange] = useState([0, 1000000]);
   const [showModal, setShowModal] = useState(false);
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState([]); // All jobs from backend
   const [filters, setFilters] = useState({
     title: "",
     location: "",
@@ -32,8 +32,10 @@ function JobCards() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await axios.get("https://myjob-9vq3.onrender.com/api/jobs");
-        setJobs(res.data.map((job) => ({ ...job, applied: false }))); // Initialize applied
+        const res = await axios.get("http://localhost:5000/api/jobs");
+        // Initialize applied status for each job
+        setJobs(res.data.map((job) => ({ ...job, applied: false })));
+        console.log("Jobs fetched:", res.data);
       } catch (err) {
         console.error("Error fetching jobs:", err);
       }
@@ -44,7 +46,7 @@ function JobCards() {
     return () => clearInterval(intervalId);
   }, []);
 
-  // Filter jobs
+  // Filter jobs dynamically
   const filteredJobs = jobs.filter((job) => {
     const matchTitle = job.role.toLowerCase().includes(filters.title.toLowerCase());
     const matchLocation = filters.location ? job.location === filters.location : true;
@@ -56,147 +58,254 @@ function JobCards() {
   return (
     <>
       {/* Navbar */}
-      <Navbar
-        bg="white"
-        expand="lg"
-        className="container-xl container-fluid shadow-sm py-3 w-75 mx-auto navbar-custom mt-2"
+ <Navbar
+  bg="white"
+  expand="lg"
+  className="shadow-sm py-3 mx-auto navbar-custom mt-2 h-25 overflow-hidden "
+  style={{ maxWidth: "800px", borderRadius: "50px" }}
+>
+  <Container>
+    <Navbar.Brand href="#">
+      <img src="logo.svg" className="mx-2" alt="logo" width="40" />
+    </Navbar.Brand>
+
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="me-auto ms-4 h6">
+        <Nav.Link href="#" className="nav-hover mx-2">Home</Nav.Link>
+        <Nav.Link href="#" className="mx-2 nav-hover">Find Jobs</Nav.Link>
+        <Nav.Link href="#" className="mx-2 nav-hover">Find Talents</Nav.Link>
+        <Nav.Link href="https://www.cybermindworks.com/portfolio/" className="mx-2 nav-hover">About us</Nav.Link>
+        <Nav.Link href="#" className="mx-2 nav-hover">Testimonials</Nav.Link>
+      </Nav>
+
+      <Button
+        variant="primary"
+        className="create-job-btn px-3 mx-4 rounded-pill"
+        onClick={() => setShowModal(true)}
+        style={{ backgroundColor: "#6100AD", borderColor: "#00AAFF" }}
       >
-        <Container className="fixed-container">
-          <Navbar.Brand href="#">
-            <img src="logo.svg" className="mx-5" alt="logo" width="40" />
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav w-50">
-            <Nav className="me-auto ms-4 h6">
-              <Nav.Link href="#" className="nav-hover">Home</Nav.Link>
-              <Nav.Link href="#" className="mx-4 nav-hover">Find Jobs</Nav.Link>
-              <Nav.Link href="#" className="mx-4 nav-hover">Find Talents</Nav.Link>
-              <Nav.Link href="https://www.cybermindworks.com/portfolio/" className="mx-4 nav-hover">About us</Nav.Link>
-              <Nav.Link href="#" className="mx-4 nav-hover">Testimonials</Nav.Link>
-            </Nav>
-            <Button variant="primary" className="rounded-pill px-4 mx-4" onClick={() => setShowModal(true)}>
-              Create Jobs
-            </Button>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+        Create Jobs
+      </Button>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
+
+
 
       {/* Create Job Modal */}
       <CreateJob show={showModal} onHide={() => setShowModal(false)} />
 
       {/* Filters */}
-      <Container className="my-4 container-fluid">
-        <Row className="g-3 align-items-center">
-          <Col xs={12} md={3}>
-            <InputGroup>
-              <InputGroup.Text><i className="bi bi-search"></i></InputGroup.Text>
-              <Form.Control
-                type="text"
-                placeholder="Search by job title or role"
-                value={filters.title}
-                onChange={(e) => setFilters({ ...filters, title: e.target.value })}
-              />
-            </InputGroup>
-          </Col>
+     <Container className="my-4 container-fluid container-xl">
+  <Row className="g-3 align-items-center">
+    
+    {/* Title Filter */}
+    <Col xs={12} md={3} className="d-flex align-items-center">
+      <InputGroup className="border-0">
+        <InputGroup.Text className="border-0 bg-white"><i className="bi bi-search"></i></InputGroup.Text>
+        <Form.Control
+          type="text"
+          placeholder="Search By Job Title, Role"
+          value={filters.title}
+          onChange={(e) => setFilters({ ...filters, title: e.target.value })}
+          className="border-0"
+        />
+      </InputGroup>
+      <span className="mx-2 d-none d-md-inline">|</span>
+    </Col>
 
-          <Col xs={12} md={3}>
-            <InputGroup>
-              <InputGroup.Text><i className="bi bi-geo-alt"></i></InputGroup.Text>
-              <Form.Select
-                value={filters.location}
-                onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-              >
-                <option value="">Choose location</option>
-                <option value="Chennai">Chennai</option>
-                <option value="Bengaluru">Bengaluru</option>
-                <option value="Delhi">Delhi</option>
-              </Form.Select>
-            </InputGroup>
-          </Col>
+    {/* Location Filter */}
+    <Col xs={12} md={3} className="d-flex align-items-center">
+      <InputGroup className="border-0">
+        <InputGroup.Text className="border-0 bg-white"><i className="bi bi-geo-alt"></i></InputGroup.Text>
+        <Form.Select
+          value={filters.location}
+          onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+          className="border-0"
+        >
+          <option value="">Perferred Location</option>
+          <option value="Chennai">Chennai</option>
+          <option value="Bengaluru">Bengaluru</option>
+          <option value="Delhi">Delhi</option>
+        </Form.Select>
+      </InputGroup>
+      <span className="mx-2 d-none d-md-inline">|</span>
+    </Col>
 
-          <Col xs={12} md={2}>
-            <InputGroup>
-              <InputGroup.Text><i className="bi bi-briefcase"></i></InputGroup.Text>
-              <Form.Select
-                value={filters.jobType}
-                onChange={(e) => setFilters({ ...filters, jobType: e.target.value })}
-              >
-                <option value="">Job Type</option>
-                <option value="Full-Time">Full-Time</option>
-                <option value="Part-Time">Part-Time</option>
-                <option value="Internship">Internship</option>
-                <option value="Contract">Contract</option>
-              </Form.Select>
-            </InputGroup>
-          </Col>
+    {/* Job Type Filter */}
+    <Col xs={12} md={3} className="d-flex align-items-center">
+      <InputGroup className="border-0">
+        <InputGroup.Text className="border-0 bg-white"><i className="bi bi-briefcase"></i></InputGroup.Text>
+        <Form.Select
+          value={filters.jobType}
+          onChange={(e) => setFilters({ ...filters, jobType: e.target.value })}
+          className="border-0"
+        >
+          <option value="">Job Type</option>
+          <option value="Onsite">Onsite</option>
+          <option value="Remote">Remote</option>
+          <option value="Hybrid">Hybrid</option>
+        </Form.Select>
+      </InputGroup>
+      <span className="mx-2 d-none d-md-inline">|</span>
+    </Col>
 
-          <Col xs={12} md={4}>
-            <div className="mb-1 text-dark d-flex justify-content-between small">
-              <span>Salary per month</span>
-              <span>₹ {range[0].toLocaleString("en-IN")} - ₹ {range[1].toLocaleString("en-IN")}</span>
-            </div>
-            <Slider
-              range
-              min={0}
-              max={100000}
-              step={1000}
-              value={range}
-              onChange={(val) => setRange(val)}
-            />
-          </Col>
-        </Row>
-      </Container>
+    {/* Salary Slider */}
+    <Col xs={12} md={3} className="d-flex flex-column">
+      <div className="mb-1 text-dark d-flex justify-content-between small">
+        <span className="fw-bold">Salary per month</span>
+        <span className="fw-bold">
+          ₹ {(range[0] / 1000).toLocaleString("en-IN")}K - ₹ {(range[1] / 1000).toLocaleString("en-IN")}K
+        </span>
+      </div>
+     <Slider
+  range
+  min={1000}
+  max={1000000}
+  step={10000}
+  value={range}
+  onChange={(val) => setRange(val)}
+  trackStyle={[{ backgroundColor: 'lightgray', }]} // Slider track color & height
+  railStyle={{ backgroundColor: '#e9ecef',  }} // Background rail
+  handleStyle={[
+    { borderColor: '#080808ff',  backgroundColor: '#fff' },
+    { borderColor: 'black',  backgroundColor: '#fff' }
+  ]}
+/>
+
+    </Col>
+
+  </Row>
+</Container>
+
 
       {/* Job Cards */}
-      <Container className="container-fluid container-sm mb-5">
-        <Row className="justify-content-center mb-5 g-4">
-          {filteredJobs.map((job, idx) => (
-            <Col xs={12} sm={6} md={6} lg={4} key={idx}>
-              <Card className="h-100 shadow-sm border-0 mb-4">
-                <Card.Body>
-                  <div className="d-flex justify-content-between mb-3">
-                    <img
-                      src={`https://logo.clearbit.com/${job.company.toLowerCase()}.com`}
-                      alt={job.company}
-                      className="img-fluid rounded"
-                      style={{ width: "50px", height: "50px", objectFit: "contain" }}
-                      onError={(e) =>
-                        (e.target.src =
-                          "https://cdn-icons-png.flaticon.com/512/5968/5968672.png")
-                      }
-                    />
-                  </div>
+      <Container className="mt-4">
+  <Row>
+    {filteredJobs.map((job, index) => {
+      // Calculate "time ago"
+      let timeAgo = "Just now";
+      if (job.createdAt) {
+        const createdDate = new Date(job.createdAt);
+        const now = new Date();
+        const diffMs = now - createdDate;
+        const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+        const diffDays = Math.floor(diffHrs / 24);
 
-                  <Card.Title>{job.role}</Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">{job.company}</Card.Subtitle>
+        if (diffHrs < 1) {
+          timeAgo = "Just now";
+        } else{
+          timeAgo = `${diffHrs}h ago`;
+        } 
+      }
 
-                  <p className="mb-2 small text-muted">
-                    {job.exp || "0-1 Yrs"} | {job.jobType} | ₹{job.salaryStart}-{job.salaryEnd}
-                  </p>
+      return (
+        <Col key={index} md={3} className="mb-1">
+          <Card className="h-100 shadow-sm border-0 position-relative">
+            
+            {/* Time Ago at top-right */}
+            <span
+              className="badge  text-dark position-absolute p-2"
 
-                  <p className="small">{job.description}</p>
+              style={{ top: "8px", right: "8px", fontSize: "0.7rem" ,backgroundColor:"#B0D9FF"
+}}
+            >
+              {timeAgo}
+            </span>
 
-                  {/* Apply / Applied button */}
-                  <Button
-                    variant="primary"
-                    className="w-100"
-                    onClick={() => {
-                      setJobs((prevJobs) =>
-                        prevJobs.map((j) =>
-                          j === job ? { ...j, applied: true } : j
-                        )
-                      );
-                    }}
-                    disabled={job.applied}
-                  >
-                    {job.applied ? "Applied" : "Apply Now"}
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </Container>
+            <Card.Body>
+              {/* Company Logo */}
+              <div
+                className="d-flex align-items-center justify-content-center mb-2"
+                style={{
+                  width: "70px",
+                  height: "70px",
+                  borderRadius: "12px",
+                  border: "none",
+                  boxShadow: "0 1px 2px rgba(0, 0, 0, 0.10)",
+                  backgroundColor: "#fff",
+                }}
+              >
+                <img
+                  src={`https://logo.clearbit.com/${job.company.toLowerCase()}.com`}
+                  alt={job.company}
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+                  }}
+                  onError={(e) =>
+                    (e.target.src =
+                      "https://cdn-icons-png.flaticon.com/512/5968/5968672.png")
+                  }
+                />
+              </div>
+
+              <Card.Title className="mb-0">{job.role}</Card.Title>
+
+              <ul
+                className="list-unstyled d-flex align-items-center mb-2 gap-3 flex-nowrap"
+                style={{ fontSize: "0.75rem", whiteSpace: "nowrap" }}
+              >
+                <li className="d-flex align-items-center">
+                  <i className="bi bi-person-plus-fill me-1 fs-6 align-middle"></i>
+                  <span>{job.exp || "0-1 Yrs"}</span>
+                </li>
+                <li className="d-flex align-items-center">
+                  <i className="bi bi-buildings me-1 fs-6 align-middle"></i>
+                  <span>{job.jobType}</span>
+                </li>
+                <li className="d-flex align-items-center">
+                  <i className="bi bi-layers me-1 fs-6 align-middle"></i>
+                  <span>
+                    {job.salaryEnd
+                      ? `₹ ${(job.salaryEnd / 10000).toFixed(1)} LPA`
+                      : "Not disclosed"}
+                  </span>
+                </li>
+              </ul>
+
+              <Card.Text style={{ fontSize: "0.8rem" }}>
+                <ul className="mb-0 ps-3">
+                  {job.description &&
+                    job.description
+                      .split(".")
+                      .map((sentence, idx) =>
+                        sentence.trim() ? (
+                          <li key={idx}>{sentence.trim()}.</li>
+                        ) : null
+                      )}
+                </ul>
+              </Card.Text>
+
+              {/* Apply / Applied button */}
+              <Button
+               
+                className="w-100 "
+                style={{ backgroundColor: " #00AAFF"
+ }}
+                onClick={() => {
+                  setJobs((prevJobs) =>
+                    prevJobs.map((j) =>
+                      j === job ? { ...j, applied: true } : j
+                    )
+                  );
+                }}
+                disabled={job.applied}
+              >
+                {job.applied ? "Applied" : "Apply Now"}
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      );
+    })}
+  </Row>
+</Container>
+
     </>
   );
 }
