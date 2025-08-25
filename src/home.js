@@ -32,7 +32,7 @@ function JobCards() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/jobs");
+        const res = await axios.get("https://myjob-9vq3.onrender.com/api/jobs");
         // Initialize applied status for each job
         setJobs(res.data.map((job) => ({ ...job, applied: false })));
         console.log("Jobs fetched:", res.data);
