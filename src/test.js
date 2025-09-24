@@ -15,7 +15,7 @@ function CreateJob({ show, onHide }) {
     description: "",
   });
 
-  const [draftJob, setDraftJob] = useState(null); // store draft locally
+  const [draftJob, setDraftJob] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -75,7 +75,7 @@ function CreateJob({ show, onHide }) {
       </div>
       <Modal.Body>
         <Form>
-          {/* Role & Company */}
+         
           <Row className="mb-3">
             <Col xs={12} md={6}>
               <Form.Group>
@@ -103,7 +103,6 @@ function CreateJob({ show, onHide }) {
             </Col>
           </Row>
 
-          {/* Location & Job Type */}
           <Row className="mb-3">
             <Col xs={12} md={6}>
               <Form.Group>
@@ -140,7 +139,7 @@ function CreateJob({ show, onHide }) {
             </Col>
           </Row>
 
-          {/* Salary & Deadline */}
+      
           <Row className="mb-3">
             <Col xs={12} md={6}>
               <Form.Group>
@@ -191,7 +190,7 @@ function CreateJob({ show, onHide }) {
             </Col>
           </Row>
 
-          {/* Job Description */}
+   
           <Form.Group className="mb-3">
             <Form.Label>Job Description</Form.Label>
             <Form.Control
@@ -208,7 +207,7 @@ function CreateJob({ show, onHide }) {
             </small>
           </Form.Group>
 
-          {/* Buttons */}
+    
           <div className="d-flex flex-column flex-md-row  bg-white justify-content-between">
             <Button
           

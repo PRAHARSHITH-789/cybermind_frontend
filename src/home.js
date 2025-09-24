@@ -1,10 +1,10 @@
-// JobCards.js
+
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
-import CreateJob from "./test"; // Your modal component
+import CreateJob from "./test"; 
 import axios from "axios";
 import {
   Container,
@@ -21,19 +21,18 @@ import {
 function JobCards() {
   const [range, setRange] = useState([0, 1000000]);
   const [showModal, setShowModal] = useState(false);
-  const [jobs, setJobs] = useState([]); // All jobs from backend
+  const [jobs, setJobs] = useState([]); 
   const [filters, setFilters] = useState({
     title: "",
     location: "",
     jobType: ""
   });
 
-  // Fetch jobs from backend
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
         const res = await axios.get("https://myjob-9vq3.onrender.com/api/jobs");
-        // Initialize applied status for each job
         setJobs(res.data.map((job) => ({ ...job, applied: false })));
         console.log("Jobs fetched:", res.data);
       } catch (err) {
@@ -46,7 +45,6 @@ function JobCards() {
     return () => clearInterval(intervalId);
   }, []);
 
-  // Filter jobs dynamically
   const filteredJobs = jobs.filter((job) => {
     const matchTitle = job.role.toLowerCase().includes(filters.title.toLowerCase());
     const matchLocation = filters.location ? job.location === filters.location : true;
@@ -57,7 +55,7 @@ function JobCards() {
 
   return (
     <>
-      {/* Navbar */}
+      
  <Navbar
   bg="white"
   expand="lg"
@@ -93,14 +91,11 @@ function JobCards() {
 
 
 
-      {/* Create Job Modal */}
       <CreateJob show={showModal} onHide={() => setShowModal(false)} />
 
-      {/* Filters */}
      <Container className="my-4 container-fluid container-xl  pb-2 bg-white">
   <Row className="g-3 align-items-center">
     
-    {/* Title Filter */}
     <Col xs={12} md={3} className="d-flex align-items-center">
       <InputGroup className="border-0">
         <InputGroup.Text className="border-0 bg-white"><i className="bi bi-search"></i></InputGroup.Text>
@@ -115,7 +110,6 @@ function JobCards() {
       <span className="mx-2 d-none d-md-inline">|</span>
     </Col>
 
-    {/* Location Filter */}
     <Col xs={12} md={3} className="d-flex align-items-center">
       <InputGroup className="border-0">
         <InputGroup.Text className="border-0 bg-white"><i className="bi bi-geo-alt"></i></InputGroup.Text>
@@ -133,7 +127,6 @@ function JobCards() {
       <span className="mx-2 d-none d-md-inline">|</span>
     </Col>
 
-    {/* Job Type Filter */}
     <Col xs={12} md={3} className="d-flex align-items-center">
       <InputGroup className="border-0">
         <InputGroup.Text className="border-0 bg-white"><i className="bi bi-briefcase"></i></InputGroup.Text>
@@ -151,7 +144,6 @@ function JobCards() {
       <span className="mx-2 d-none d-md-inline">|</span>
     </Col>
 
-    {/* Salary Slider */}
     <Col xs={12} md={3} className="d-flex flex-column">
       <div className="mb-1 text-dark d-flex justify-content-between small">
         <span className="fw-bold">Salary Per Month</span>
@@ -160,14 +152,14 @@ function JobCards() {
         </span>
       </div>
      <Slider
-  range
+range
   min={1000}
   max={1000000}
   step={10000}
   value={range}
   onChange={(val) => setRange(val)}
-  trackStyle={[{ backgroundColor: 'lightgray', }]} // Slider track color & height
-  railStyle={{ backgroundColor: '#e9ecef',  }} // Background rail
+  trackStyle={[{ backgroundColor: 'lightgray', }]} 
+  railStyle={{ backgroundColor: '#e9ecef',  }}
   handleStyle={[
     { borderColor: '#080808ff',  backgroundColor: '#fff' },
     { borderColor: 'black',  backgroundColor: '#fff' }
@@ -184,7 +176,7 @@ function JobCards() {
       <Container className="mt-4">
   <Row>
     {filteredJobs.map((job, index) => {
-      // Calculate "time ago"
+  
       let timeAgo = "Just now";
       if (job.createdAt) {
         const createdDate = new Date(job.createdAt);
@@ -195,16 +187,19 @@ function JobCards() {
 
         if (diffHrs < 1) {
           timeAgo = "Just now";
-        } else{
+        } else if( diffHrs < 24) {
           timeAgo = `${diffHrs}h Ago`;
         } 
+        else{
+          timeAgo=`${diffDays}d Ago`;
+        }
       }
 
       return (
         <Col key={index} md={3} className="mb-1">
           <Card className="h-100 shadow-sm border-0 position-relative">
             
-            {/* Time Ago at top-right */}
+          
             <span
               className="badge  text-dark position-absolute p-2"
 
@@ -215,7 +210,7 @@ function JobCards() {
             </span>
 
             <Card.Body>
-              {/* Company Logo */}
+             
               <div
                 className="d-flex align-items-center justify-content-center mb-2"
                 style={{
@@ -271,7 +266,7 @@ function JobCards() {
               <Card.Text style={{ fontSize: "0.8rem" }}>
                 <ul className="mb-0 ps-3">
                   {job.description &&
-                    job.description
+           job.description
                       .split(".")
                       .map((sentence, idx) =>
                         sentence.trim() ? (
@@ -281,8 +276,7 @@ function JobCards() {
                 </ul>
               </Card.Text>
 
-              {/* Apply / Applied button */}
-              <Button
+                       <Button
                
                 className="w-100 "
                 style={{ backgroundColor: " #00AAFF"
